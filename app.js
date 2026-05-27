@@ -13,7 +13,13 @@ const __dirname = path.dirname(__filename);
 const clientPath = path.join(__dirname, "client");
 
 app.set("trust proxy", 1);
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      "script-src": ["'self'", "https://cdn.tailwindcss.com"]
+    }
+  }
+}));
 
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
