@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .resume-wrap-text {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+
+        #previewPage,
+        #previewPage * {
+          visibility: visible;
+        }
+
+        #previewPage {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          box-shadow: none !important;
+          border: 0 !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-stone-50 text-neutral-900 antialiased">
+    <div id="toast" class="pointer-events-none fixed right-4 top-4 z-50 hidden max-w-sm rounded-lg border border-neutral-200 bg-white px-4 py-3 text-sm font-medium shadow-lg"></div>
+
+    <header class="no-print border-b border-neutral-200 bg-white/90 backdrop-blur">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">Resume Builder</p>
+          <h1 id="pageTitle" class="text-2xl font-semibold text-neutral-950">Build your resume</h1>
+        </div>
+        <div id="sessionBar" class="flex flex-wrap items-center gap-2"></div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <section id="authView" class="no-print mx-auto grid max-w-5xl gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <div class="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
+          <div class="flex gap-2 border-b border-neutral-200 pb-4" role="tablist" aria-label="Authentication">
+            <button id="loginTab" class="auth-tab rounded-md px-4 py-2 text-sm font-semibold" type="button">Login</button>
+            <button id="registerTab" class="auth-tab rounded-md px-4 py-2 text-sm font-semibold" type="button">Register</button>
+          </div>
+
+          <form id="loginForm" class="space-y-4 pt-5">
+            <label class="block">
+              <span class="text-sm font-medium text-neutral-700">Email or username</span>
+              <input class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2" name="identifier" autocomplete="username" required />
+            </label>
+            <label class="block">
+              <span class="text-sm font-medium text-neutral-700">Password</span>
+              <input class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2" name="password" type="password" autocomplete="current-password" required />
+            </label>
+            <button class="w-full rounded-lg bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-neutral-800" type="submit">Login</button>
+          </form>
+
+          <form id="registerForm" class="hidden space-y-4 pt-5">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="block">
+                <span class="text-sm font-medium text-neutral-700">Full name</span>
+                <input class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2" name="fullname" autocomplete="name" required />
+              </label>
+              <label class="block">
+                <span class="text-sm font-medium text-neutral-700">Username</span>
+                <input class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2" name="username" autocomplete="username" required />
+              </label>
+            </div>
+            <label class="block">
+              <span class="text-sm font-medium text-neutral-700">Email</span>
+              <input class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2" name="email" type="email" autocomplete="email" required />
+            </label>
+            <label class="block">
+              <span class="text-sm font-medium text-neutral-700">Password</span>
+              <input class="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2" name="password" type="password" autocomplete="new-password" required />
+            </label>
+            <button class="w-full rounded-lg bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-neutral-800" type="submit">Create account</button>
+          </form>
+        </div>
+
+        <div class="grid content-center gap-4 rounded-lg border border-emerald-200 bg-emerald-50 p-6">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-800">Mongo + Express API</p>
+          <h2 class="max-w-lg text-3xl font-semibold leading-tight text-neutral-950">A plain JavaScript client wired to your existing backend.</h2>
+          <p class="max-w-xl text-sm leading-6 text-neutral-700">Use the forms to create, edit, preview, delete, and share resumes through the API routes already in this project.</p>
+        </div>
+      </section>
+
+      <section id="appView" class="hidden">
+        <div class="no-print mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-white p-3 shadow-sm">
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="newResumeBtn" class="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-semibold transition hover:border-emerald-500 hover:text-emerald-700" type="button">New</button>
+            <button id="saveResumeBtn" class="rounded-lg bg-neutral-950 px-3 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800" type="button">Save</button>
+            <button id="shareResumeBtn" class="rounded-lg border border-sky-300 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-800 transition hover:bg-sky-100" type="button">Share</button>
+            <button id="printResumeBtn" class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 transition hover:bg-amber-100" type="button">Print</button>
+          </div>
+          <div class="text-sm text-neutral-600">
+            API: <span class="font-mono text-neutral-950">http://localhost:5000/api/v1</span>
+          </div>
+        </div>
+
+        <div class="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)_minmax(360px,0.9fr)]">
+          <aside class="no-print rounded-lg border border-neutral-200 bg-white p-4 shadow-sm lg:sticky lg:top-4 lg:self-start">
+            <div class="mb-3 flex items-center justify-between gap-2">
+              <h2 class="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-500">Resumes</h2>
+              <span id="resumeCount" class="rounded-md bg-neutral-100 px-2 py-1 text-xs font-semibold text-neutral-600">0</span>
+            </div>
+            <div id="resumeList" class="space-y-2"></div>
+          </aside>
+
+          <form id="resumeForm" class="no-print rounded-lg border border-neutral-200 bg-white p-4 shadow-sm">
+            <div id="editorFields" class="space-y-6"></div>
+          </form>
+
+          <section class="lg:sticky lg:top-4 lg:self-start">
+            <div id="previewPage" class="min-h-[980px] rounded-lg border border-neutral-200 bg-white p-8 shadow-sm"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="shareView" class="hidden">
+        <div class="no-print mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-white p-3 shadow-sm">
+          <button id="backToBuilderBtn" class="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-semibold transition hover:border-emerald-500 hover:text-emerald-700" type="button">Back</button>
+          <button id="printSharedBtn" class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 transition hover:bg-amber-100" type="button">Print</button>
+        </div>
+        <div class="mx-auto max-w-4xl">
+          <div id="sharedPreviewPage" class="min-h-[980px] rounded-lg border border-neutral-200 bg-white p-8 shadow-sm"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
