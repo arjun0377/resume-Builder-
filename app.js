@@ -43,14 +43,14 @@ app.use(cookieParser());
 import userRouter from  "./src/routes/user.routes.js"
 import resumeRouter from "./src/routes/resume.routes.js"
 
-app.use(express.static(clientPath));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(clientPath, "index.html"));
-});
-
 app.use("/api/v1/users" , userRouter)
 app.use("/api/v1/resumes" , resumeRouter)
+
+app.use(express.static(clientPath));
+
+app.get("/{*splat}", (req, res) => {
+  res.sendFile(path.join(clientPath, "index.html"));
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
