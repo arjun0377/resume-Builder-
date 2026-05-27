@@ -3,8 +3,14 @@ import rateLimit from "express-rate-limit";
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import path from "node:path";
+import { fileURLToPath } from "node:url"; 
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const clientPath = path.join(__dirname, "client");
 
 app.set("trust proxy", 1);
 app.use(helmet());
@@ -36,6 +42,12 @@ app.use(cookieParser());
 
 import userRouter from  "./src/routes/user.routes.js"
 import resumeRouter from "./src/routes/resume.routes.js"
+
+app.use(express.static(clientPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(clientPath, "index.html"));
+});
 
 app.use("/api/v1/users" , userRouter)
 app.use("/api/v1/resumes" , resumeRouter)
